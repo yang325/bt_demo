@@ -1,0 +1,44 @@
+/ {
+    leds {
+        compatible = "gpio-leds";
+        user_led: user_led {
+            gpios = <&gpioa 2 GPIO_ACTIVE_LOW>;
+            label = "User LED";
+        };
+        bt_cs: bt_cs {
+            gpios = <&gpiod 10 GPIO_ACTIVE_HIGH>;
+            label = "Chip Selection";
+        };
+    };
+
+    aliases {
+        led = &user_led;
+        cs = &bt_cs;
+    };
+
+    chosen {
+        zephyr,bt-uart = &usart3;
+    };
+};
+
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* Set 16Kb of storage at the end of the 512Kb of flash */
+        storage_partition: partition@7c000 {
+            label = "storage";
+            reg = <0x0007c000 DT_SIZE_K(16)>;
+        };
+    };
+};
+
+&usart3 {
+    pinctrl-0 = <&usart3_tx_pd8 &usart3_rx_pd9 &usart3_cts_pd11 &usart3_rts_pd12>;
+    pinctrl-names = "default";
+    current-speed = <1000000>;
+    hw-flow-control;
+    status = "okay";
+};
