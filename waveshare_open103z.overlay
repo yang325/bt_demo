@@ -43,7 +43,7 @@
 };
 
 &usart3 {
-    pinctrl-0 = <&usart3_tx_pd8 &usart3_rx_pd9 &usart3_cts_pd11 &usart3_rts_pd12>;
+    pinctrl-0 = <&usart3_tx_remap2_pd8 &usart3_rx_remap2_pd9 &usart3_cts_remap2_pd11 &usart3_rts_remap2_pd12>;
     pinctrl-names = "default";
     current-speed = <1000000>;
     hw-flow-control;
