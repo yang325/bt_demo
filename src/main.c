@@ -91,9 +91,24 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
     LOG_INF("Disconnected (reason 0x%02x)", reason);
 }
 
+static void remote_info_available(struct bt_conn *conn, struct bt_conn_remote_info *remote_info)
+{
+    uint8_t features[8];
+	char features_str[2 * sizeof(features) +  1] = {0};
+
+    LOG_INF("Remote LMP version 0x%02x subversion 0x%04x manufacturer 0x%04x",
+                remote_info->version, remote_info->subversion, remote_info->manufacturer);
+
+    sys_memcpy_swap(features, remote_info->le.features, sizeof(features));
+	bin2hex(features, sizeof(features), features_str, sizeof(features_str));
+
+    LOG_INF("LE Features: 0x%s ", features_str);
+}
+
 BT_CONN_CB_DEFINE(conn_callbacks) = {
     .connected = connected,
     .disconnected = disconnected,
+    .remote_info_available = remote_info_available,
 };
 
 static void auth_passkey_display(struct bt_conn *conn, unsigned int passkey)
