@@ -77,7 +77,7 @@ static void connected(struct bt_conn *conn, uint8_t err)
     }
 
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
-    LOG_INF("Connected to %s", log_strdup(addr));
+    LOG_INF("Connected to %s", addr);
 
     ret = bt_gatt_exchange_mtu(conn, &params);
     if (ret) {
@@ -117,7 +117,7 @@ static void auth_passkey_display(struct bt_conn *conn, unsigned int passkey)
 
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 
-    LOG_INF("Passkey for %s: %06u", log_strdup(addr), passkey);
+    LOG_INF("Passkey for %s: %06u", addr, passkey);
 }
 
 static void auth_cancel(struct bt_conn *conn)
@@ -126,7 +126,7 @@ static void auth_cancel(struct bt_conn *conn)
 
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 
-    LOG_INF("Pairing cancelled: %s", log_strdup(addr));
+    LOG_INF("Pairing cancelled: %s", addr);
 }
 
 static struct bt_conn_auth_cb auth_cb_display = {
