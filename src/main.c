@@ -30,15 +30,13 @@ LOG_MODULE_REGISTER(demo);
 int bt_long_vnd_notify(void);
 
 /* The devicetree node identifier for the "led0" alias. */
-#define LED_NODE DT_ALIAS(led)
-#define BT_CS_NODE DT_ALIAS(cs)
+#define LED_NODE DT_ALIAS(led0)
 
 /*
  * A build error on this line means your board is unsupported.
  * See the sample documentation for information on how to fix this.
  */
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED_NODE, gpios);
-static const struct gpio_dt_spec bt_cs = GPIO_DT_SPEC_GET(BT_CS_NODE, gpios);
 
 static const struct bt_data ad[] = {
     BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
@@ -175,23 +173,6 @@ void main(void)
         LOG_ERR("Configure LED pin failed (err %d)", err);
         return;
     }
-
-    if (!device_is_ready(bt_cs.port)) {
-        LOG_ERR("Chip selection is not ready");
-        return;
-    }
-
-    err = gpio_pin_configure_dt(&bt_cs, GPIO_OUTPUT_INACTIVE);
-    if (err < 0) {
-        LOG_ERR("Configure chip selection pin failed (err %d)", err);
-        return;
-    }
-
-    /* Hold 5ms for reset pin when doing a pin reset */
-    k_sleep(K_MSEC(5));
-    /* Set chip selection and hold 5ms */
-    gpio_pin_set_dt(&bt_cs, 1);
-    k_sleep(K_MSEC(5));
 
     err = bt_enable(NULL);
     if (err) {
