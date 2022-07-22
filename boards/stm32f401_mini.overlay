@@ -5,20 +5,6 @@
     current-speed = <921600>;
 };
 
-&flash0 {
-    partitions {
-        compatible = "fixed-partitions";
-        #address-cells = <1>;
-        #size-cells = <1>;
-
-        /* Set 16Kb of storage at the end of the 256Kb of flash */
-        storage_partition: partition@3c000 {
-            label = "storage";
-            reg = <0x0003c000 DT_SIZE_K(16)>;
-        };
-    };
-};
-
 &spi2 {
     status = "okay";
 
