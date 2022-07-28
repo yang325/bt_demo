@@ -1,23 +1,22 @@
+/ {
+    chosen {
+        zephyr,bt-uart = &usart1;
+        zephyr,console = &usart2;
+        zephyr,shell-uart = &usart2;
+    };
+};
+
 &usart1 {
-    pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
+    pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10 &usart1_cts_pa11 &usart1_rts_pa12>;
+    pinctrl-names = "default";
+    status = "okay";
+    current-speed = <1000000>;
+    hw-flow-control;
+};
+
+&usart2 {
+    pinctrl-0 = <&usart2_tx_pa2 &usart2_rx_pa3>;
     pinctrl-names = "default";
     status = "okay";
     current-speed = <921600>;
-};
-
-&spi2 {
-    status = "okay";
-
-    pinctrl-0 = <&spi2_nss_pb12 &spi2_sck_pb13 &spi2_miso_pb14 &spi2_mosi_pb15>;
-    pinctrl-names = "default";
-
-    /* Nordic nRF51822-QFAC */
-    bt-hci@0 {
-        compatible = "zephyr,bt-hci-spi";
-        reg = <0>;
-        reset-gpios = <&gpioa 12 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        irq-gpios = <&gpioa 8 GPIO_ACTIVE_HIGH>;
-        spi-max-frequency = <2000000>;
-        label = "BT_HCI";
-    };
 };
