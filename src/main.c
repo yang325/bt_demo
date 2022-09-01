@@ -92,21 +92,33 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
 static void remote_info_available(struct bt_conn *conn, struct bt_conn_remote_info *remote_info)
 {
     uint8_t features[8];
-	char features_str[2 * sizeof(features) +  1] = {0};
+    char features_str[2 * sizeof(features) +  1] = {0};
 
     LOG_INF("Remote LMP version 0x%02x subversion 0x%04x manufacturer 0x%04x",
                 remote_info->version, remote_info->subversion, remote_info->manufacturer);
 
     sys_memcpy_swap(features, remote_info->le.features, sizeof(features));
-	bin2hex(features, sizeof(features), features_str, sizeof(features_str));
+    bin2hex(features, sizeof(features), features_str, sizeof(features_str));
 
     LOG_INF("LE Features: 0x%s ", features_str);
+}
+
+static void le_data_len_updated(struct bt_conn *conn, struct bt_conn_le_data_len_info *info)
+{
+    char addr[BT_ADDR_LE_STR_LEN];
+
+    bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
+
+    LOG_INF("Data length updated: %s max tx %u (%u us) max rx %u (%u us)\n",
+           addr, info->tx_max_len, info->tx_max_time, info->rx_max_len,
+           info->rx_max_time);
 }
 
 BT_CONN_CB_DEFINE(conn_callbacks) = {
     .connected = connected,
     .disconnected = disconnected,
     .remote_info_available = remote_info_available,
+    .le_data_len_updated = le_data_len_updated,
 };
 
 static void auth_passkey_display(struct bt_conn *conn, unsigned int passkey)
