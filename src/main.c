@@ -12,7 +12,7 @@
 #include <errno.h>
 #include <zephyr/sys/byteorder.h>
 #include <zephyr/sys/reboot.h>
-#include <zephyr/zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/settings/settings.h>
 #include <zephyr/drivers/gpio.h>
 
